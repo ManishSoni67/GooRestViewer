@@ -1,0 +1,62 @@
+﻿<UserControl
+    x:Class="GooRestViewer.Controls.SidePanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GooRestViewer.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:Converters="using:RT.Converters"
+    x:Name="userControl"
+    d:DesignHeight="700"
+    d:DesignWidth="240"
+       DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+    <UserControl.Resources>
+        <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <Storyboard x:Name="Str_TransitionIn" AutoReverse="False" Duration="0:0:0.5" Completed="Transition_InCompleted">
+            <!--<DoubleAnimation Duration="0:0:0.5" From="90" To="0" Storyboard.TargetProperty="(UIElement.Projection).(PlaneProjection.RotationY)" Storyboard.TargetName="userControl" EasingFunction="{StaticResource AnimationIn}"/>-->
+            <DoubleAnimation Duration="0:0:0.3" From="-240" To="0" Storyboard.TargetName="LayoutRoot" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" EasingFunction="{StaticResource TransitionIn}" />
+            <DoubleAnimation Duration="0:0:0.4" From="-100" To="0" Storyboard.TargetName="ContentRoot" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" EasingFunction="{StaticResource TransitionIn}" />
+
+        </Storyboard>
+        <Storyboard x:Name="Str_TransitionOut" AutoReverse="False" Completed="Transition_OutCompleted">
+            <!--<DoubleAnimation Duration="0:0:0.5" From="90" To="0" Storyboard.TargetProperty="(UIElement.Projection).(PlaneProjection.RotationY)" Storyboard.TargetName="userControl" EasingFunction="{StaticResource AnimationIn}"/>-->
+            <DoubleAnimation Duration="0:0:0.3" From="0" To="-240" Storyboard.TargetName="LayoutRoot" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" EasingFunction="{StaticResource TransitionOut}" />
+            <DoubleAnimation Duration="0:0:0.4" From="0" To="-100" Storyboard.TargetName="ContentRoot" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" EasingFunction="{StaticResource TransitionOut}" />
+
+        </Storyboard>
+    </UserControl.Resources>
+    <UserControl.Background>
+        <StaticResource ResourceKey="DefaultBackgroudBrush"/>
+    </UserControl.Background>
+
+    <Grid x:Name="LayoutRoot" Background="{StaticResource DefaultBackgroudBrush}">
+        <Grid.RenderTransform>
+            <CompositeTransform/>
+        </Grid.RenderTransform>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="menu" VerticalAlignment="Top" FontSize="48" Margin="12"/>
+        <ScrollViewer  Grid.Row="1" Margin="20,0,12,0" >
+            <Grid x:Name="ContentRoot" RenderTransformOrigin="0.5,0.5" >
+                <Grid.RenderTransform>
+                    <CompositeTransform TranslateX="0"/>
+                </Grid.RenderTransform>
+                <StackPanel x:Name="stck_Options" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                    <Button Content="URI builder" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" Foreground="{StaticResource Gray_ForegroundBrush}" Style="{StaticResource ButtonStyle_ImageContent}" Padding="0,10" HorizontalContentAlignment="Left" Click="URI_Builder_Click"/>
+                    <Button Content="saved URIs" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" Foreground="#FF707070" Style="{StaticResource ButtonStyle_ImageContent}" Padding="0,10" HorizontalContentAlignment="Left" Click="btn_SavedURIs_click"/>
+                    <Button Content="write to us" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" Foreground="#FF707070" Style="{StaticResource ButtonStyle_ImageContent}" Padding="0,10" HorizontalContentAlignment="Left" Click="btn_WriteUs_Click"/>
+                    <Button Content="share" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" Foreground="#FF707070" Style="{StaticResource ButtonStyle_ImageContent}" Padding="0,10" HorizontalContentAlignment="Left" Click="btn_share_Click" Margin="0.167,0,0.166,0"/>
+                    <Button Content="review helps :)" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" Foreground="#FF707070" Style="{StaticResource ButtonStyle_ImageContent}" Padding="0,10" HorizontalContentAlignment="Left" Click="btn_Review_Click"/>
+                    <Button Content="about" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" Foreground="#FF707070" Style="{StaticResource ButtonStyle_ImageContent}" Padding="0,10" HorizontalContentAlignment="Left" Click="btn_AboutUs_Click"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Bottom" Margin="0,0,0,12">
+                    <TextBlock TextWrapping="Wrap" Text="app version" FontSize="18.667" Foreground="{StaticResource DefaultGray_BorderBrush}" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="txt_Appversion" TextWrapping="Wrap" Text="0.0.0.0" FontSize="18.667" Foreground="{StaticResource Gray_ForegroundBrush}" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

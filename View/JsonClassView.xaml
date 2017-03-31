@@ -1,0 +1,130 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GooRestViewer.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ViewModel="using:GooJsonViewer.Models"
+    xmlns:GooJsonViewer="using:GooJsonViewer"
+    xmlns:Controls="using:RT.CustomControl.Controls"
+    x:Class="GooRestViewer.View.JsonClassView"
+    xmlns:Converters="using:RT.Converters" 
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+    <Page.Transitions>
+        <TransitionCollection>
+            <EdgeUIThemeTransition Edge="Right"/>
+        </TransitionCollection>
+    </Page.Transitions>
+
+    <Page.Resources>
+        <Storyboard x:Name="str_Show_Search_Control" AutoReverse="False" Completed="str_Show_Search_Control_Completed">
+            <!--<DoubleAnimation Duration="0:0:0.5" From="90" To="0" Storyboard.TargetProperty="(UIElement.Projection).(PlaneProjection.RotationY)" Storyboard.TargetName="userControl" EasingFunction="{StaticResource AnimationIn}"/>-->
+            <DoubleAnimation Duration="0:0:0.3" To="400" From="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="grd_Header_Menu" EasingFunction="{StaticResource TransitionOut}"/>
+
+            <DoubleAnimation Duration="0:0:0.4" To="0" From="-400" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="grd_Search" EasingFunction="{StaticResource TransitionIn}"/>
+        </Storyboard>
+        <Storyboard x:Name="str_Hide_Search_Control" AutoReverse="False" Completed="str_Hide_Search_Control_Completed">
+            <DoubleAnimation Duration="0:0:0.4" To="0" From="400" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="grd_Header_Menu" EasingFunction="{StaticResource TransitionIn}"/>
+
+            <DoubleAnimation Duration="0:0:0.3" To="-400" From="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="grd_Search"  EasingFunction="{StaticResource TransitionOut}"/>
+            <!--<DoubleAnimation Duration="0:0:0.5" From="90" To="0" Storyboard.TargetProperty="(UIElement.Projection).(PlaneProjection.RotationY)" Storyboard.TargetName="userControl" EasingFunction="{StaticResource AnimationIn}"/>-->
+        </Storyboard>
+        <Converters:BoolToVisibilityConverter x:Key="BoolToVisibiltyConverter"/>
+        <DataTemplate x:Key="lst_ItemTemplate">
+            <Grid>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding}" VerticalAlignment="Top" FontSize="18.667"/>
+            </Grid>
+        </DataTemplate>
+        <ItemsPanelTemplate x:Key="ItemsPanelTemplate">
+            <ItemsStackPanel Orientation="Horizontal" />
+        </ItemsPanelTemplate>
+    </Page.Resources>
+    <!--<Page.BottomAppBar>
+        <CommandBar Visibility="Collapsed">
+            <AppBarButton x:Name="App_Btn_Back" Icon="Back" Label="Back" />
+            <AppBarButton x:Name="App_Btn_Mail" Icon="Mail" Label="E-Mail" />
+        </CommandBar>
+    </Page.BottomAppBar>-->
+
+    <!--<Page.DataContext>
+        <ViewModel:JsonClassVM/>
+    </Page.DataContext>-->
+
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+		<Border x:Name="HeaderPanel" MaxHeight="{StaticResource MaxHeightHeader}" MinHeight="{StaticResource MinHeightHeader}" Background="{ThemeResource PhoneAccentBrush}">
+			 <Grid>
+                <Grid x:Name="grd_Header_Menu" Margin="{StaticResource HeaderContainerMargin}">
+                    <Grid.RenderTransform>
+                        <CompositeTransform  />
+                    </Grid.RenderTransform>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button x:Name="btn_retry" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" BorderBrush="{x:Null}" Foreground="{x:Null}" Style="{StaticResource ButtonStyle_ImageContent}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Click="btn_retry_Click" Visibility="Collapsed">
+                            <Image Source="ms-appx:///Icons/MetroIcons/Refresh.png" />
+                        </Button>
+                        <Button x:Name="btn_options" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" BorderBrush="{x:Null}" Foreground="{x:Null}" Style="{StaticResource ButtonStyle_ImageContent}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,0,6,0">
+						<Button.Flyout>
+							<Flyout x:Name="fly_Options" FlyoutPresenterStyle="{StaticResource FlyoutPresenterStyle}">
+								<Border Background="{StaticResource BorderBrush_GrayColor}" Padding="10,12">
+									<StackPanel>
+										<TextBlock TextWrapping="Wrap" Text="options" Foreground="{StaticResource Gray_ForegroundBrush}" VerticalAlignment="Top" FontWeight="SemiBold" FontSize="16" HorizontalAlignment="Left"/>
+                                		<Button x:Name="btn_ExpandCollapseClasses" Content="expand all" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" HorizontalContentAlignment="Left" Style="{StaticResource ButtonStyle_ImageContent}" Foreground="{StaticResource DefaultForegroundBrush}" Margin="5,0,0,0" Padding="0,8" Click="btn_ExpandCollapseClasses_Click"/>
+										<Button x:Name="btn_SendMail" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" HorizontalContentAlignment="Left" Style="{StaticResource ButtonStyle_ImageContent}" Foreground="{StaticResource DefaultForegroundBrush}" Margin="5,0,0,0" Padding="0,8" Click="btn_SendMail_Click">
+											<StackPanel Orientation="Horizontal">
+												<Image Source="ms-appx:///Icons/MetroIcons/Mail.png" Width="25" Height="25" Margin="0,0,12,0" />
+                      							<TextBlock Text="mail class structure"  VerticalAlignment="Center" Margin="0" Foreground="{StaticResource DefaultForegroundBrush}" />
+        									</StackPanel>
+										</Button>
+										<Button x:Name="btn_showClassesMap" Content="show class map" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" HorizontalContentAlignment="Left" Style="{StaticResource ButtonStyle_ImageContent}" Foreground="{StaticResource DefaultForegroundBrush}" Margin="5,0,0,0" Padding="0,8" Click="btn_showClassesMap_Click" Visibility="Collapsed"/>
+									</StackPanel>
+                                
+								</Border>
+                                
+							</Flyout>
+						</Button.Flyout>
+                            <Image Source="ms-appx:///Icons/MetroIcons/Options.png" Width="30" Height="30" />
+                        </Button>
+                        <Button x:Name="btn_search" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="0" BorderBrush="{x:Null}" Foreground="{x:Null}" Style="{StaticResource ButtonStyle_ImageContent}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0" Click="btn_search_Click">
+                            <Image Source="ms-appx:///Icons/MetroIcons/Zoom.png" Width="25" Height="25" />
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border x:Name="brd_ClassCount" BorderBrush="{StaticResource DefaultBackgroudBrush}" BorderThickness="0" Background="{StaticResource DefaultBackgroudBrush}" Padding="5" Margin="0,0,10,0" CornerRadius="5" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock x:Name="txt_classcount" Foreground="{StaticResource PhoneAccentBrush}" FontSize="16" Text="10" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
+                        </Border>
+                        <TextBlock TextWrapping="Wrap" Text="Classes" FontSize="{StaticResource HeaderTitleFontSize}" Foreground="{StaticResource DefaultBackgroudBrush}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0"/>
+                    </StackPanel>
+                </Grid>
+                <Grid x:Name="grd_Search" Background="{StaticResource DefaultBackgroudBrush}" Visibility="Collapsed">
+                    <Grid.RenderTransform>
+                        <CompositeTransform  TranslateX="0"/>
+                    </Grid.RenderTransform>
+                    <TextBox x:Name="txt_Search_class" Margin="0" TextWrapping="Wrap" VerticalAlignment="Stretch" PlaceholderText="search for a class or a property" Padding="7,2.5,50,4" AcceptsReturn="True" FontSize="21.333" TextChanged="txt_Search_class_TextChanged"/>
+                    <Button x:Name="btn_clear" HorizontalAlignment="Right" VerticalAlignment="Stretch" BorderThickness="0" BorderBrush="#FFACA8A8" Style="{StaticResource ButtonStyle_ImageContent}" Margin="0" Click="btn_clear_Click" Foreground="{StaticResource DefaultForegroundBrush}" Padding="10,0" Visibility="Collapsed">
+                        <Image Source="ms-appx:///Icons/MetroIcons/Cross.png" VerticalAlignment="Center" HorizontalAlignment="Center" Width="25" Height="25" />
+                    </Button>
+                </Grid>
+            </Grid>
+		</Border>
+       <Grid x:Name="ContentPanel" Grid.Row="1">
+            <ScrollViewer x:Name="scrl_Classes" Background="{StaticResource DefaultBackgroudBrush}">
+                <StackPanel x:Name="grd_Content">
+                    <!--<ListView Visibility="{Binding HaveClasses, Converter={StaticResource BoolToVisibiltyConverter}, Mode=TwoWay}" ItemsSource="{Binding _Classes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemTemplate="{StaticResource lst_ItemTemplate}" Foreground="{StaticResource DefaultForegroundBrush}" ItemsPanel="{StaticResource ItemsPanelTemplate}" VerticalContentAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Disabled"/>
+				-->
+                </StackPanel>
+            </ScrollViewer>
+            <Border x:Name="stck_RetryContainer" BorderBrush="Black" Background="{StaticResource DefaultBackgroudBrush}" Padding="10" Visibility="Collapsed">
+                <StackPanel>
+                    <Controls:RetryControl x:Name="cntrl_retry" Retry="cntrl_retry_clicked" AnimationCompleted="cntrl_retry_animation_completed"/>
+                    <TextBlock x:Name="txt_errormessage" Text="Oops! click on the button above to retry" TextWrapping="Wrap" Margin="0" FontSize="18.667" TextAlignment="Center" Foreground="{StaticResource DefaultGray_BorderBrush}" />
+                    <Controls:ErrorMessage x:Name="cntrl_errorMessage" Margin="0,10,0,0" Grid.Row="1" VerticalAlignment="Top" Visibility="Collapsed"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Page>
